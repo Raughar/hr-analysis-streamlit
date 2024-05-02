@@ -98,20 +98,16 @@ if page == 'Attrition Prediction':
         import pickle
 
         #Getting the LabelEncoder from the file
-        with open(r'files\label-encoder', 'rb') as file:
-            le = pickle.load(file)
+        le = pickle.load(open('files/label-encoderl','rb'))
 
         #Getting the model from the file
-        with open(r'files\model', 'rb') as file:
-            model = pickle.load(file)
+        model = pickle.load(open('files/model','rb'))
 
         #Getting the transformers from the file
-        with open(r'files\transformer', 'rb') as file:
-            transformers = pickle.load(file)
+        transformers = pickle.load(open('files/transformers','rb'))
 
         #Getting the winsorizer from the file
-        with open(r'files\winsorizer', 'rb') as file:
-            winsorizer = pickle.load(file)
+        winsorizer = pickle.load(open('files/winsorizer','rb'))
         
         #Creating the dataframe with the input data
         input_data = pd.DataFrame({'Age': [Age], 'BusinessTravel': [BusinessTravel], 'DailyRate': [DailyRate], 'Department': [Department], 'DistanceFromHome': [DistanceFromHome], 'Education': [Education], 'EducationField': [EducationField], 'EnvironmentSatisfaction': [EnvironmentSatisfaction], 'MonthlyIncome': [MonthlyIncome], 'JobInvolvement': [JobInvolvement], 'JobLevel': [JobLevel], 'JobRole': [JobRole], 'JobSatisfaction': [JobSatisfaction], 'MaritalStatus': [MaritalStatus], 'MonthlyRate': [MonthlyRate], 'NumCompaniesWorked': [NumCompaniesWorked], 'OverTime': [OverTime], 'PercentSalaryHike': [PercentSalaryHike], 'PerformanceRating': [PerformanceRating], 'RelationshipSatisfaction': [RelationshipSatisfaction], 'StockOptionLevel': [StockOptionLevel], 'TotalWorkingYears': [TotalWorkingYears], 'TrainingTimesLastYear': [TrainingTimesLastYear], 'WorkLifeBalance': [WorkLifeBalance], 'YearsAtCompany': [YearsAtCompany], 'YearsInCurrentRole': [YearsInCurrentRole], 'YearsSinceLastPromotion': [YearsSinceLastPromotion], 'YearsWithCurrManager': [YearsWithCurrManager]})
