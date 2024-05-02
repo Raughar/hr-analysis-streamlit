@@ -104,7 +104,7 @@ if page == 'Attrition Prediction':
         model = pickle.load(open('files/model','rb'))
 
         #Getting the transformers from the file
-        transformers = pickle.load(open('files/transformers','rb'))
+        transformers = pickle.load(open('files/transformer','rb'))
 
         #Getting the winsorizer from the file
         winsorizer = pickle.load(open('files/winsorizer','rb'))
