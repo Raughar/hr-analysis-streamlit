@@ -98,19 +98,19 @@ if page == 'Attrition Prediction':
         import pickle
 
         #Getting the LabelEncoder from the file
-        with open('files/label-encoder.pkl', 'rb') as file:
+        with open(r'files\label-encoder', 'rb') as file:
             le = pickle.load(file)
 
         #Getting the model from the file
-        with open('files/model.pkl', 'rb') as file:
+        with open(r'files\model', 'rb') as file:
             model = pickle.load(file)
 
         #Getting the transformers from the file
-        with open('files/transformer.pkl', 'rb') as file:
+        with open(r'files\transformer', 'rb') as file:
             transformers = pickle.load(file)
 
         #Getting the winsorizer from the file
-        with open('files/winsorizer.pkl', 'rb') as file:
+        with open(r'files\winsorizer', 'rb') as file:
             winsorizer = pickle.load(file)
         
         #Creating the dataframe with the input data
