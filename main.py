@@ -98,7 +98,7 @@ if page == 'Attrition Prediction':
         import pickle
 
         #Getting the LabelEncoder from the file
-        le = pickle.load(open('files/label-encoderl','rb'))
+        le = pickle.load(open('files/label-encoder','rb'))
 
         #Getting the model from the file
         model = pickle.load(open('files/model','rb'))
