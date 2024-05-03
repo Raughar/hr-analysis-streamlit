@@ -87,6 +87,7 @@ if page == 'Attrition Prediction':
     YearsInCurrentRole = st.number_input('Years In Current Role', min_value=0)
     YearsSinceLastPromotion = st.number_input('Years Since Last Promotion', min_value=0)
     YearsWithCurrManager = st.number_input('Years With Current Manager', min_value=0)
+    Attrition = st.selectbox('Attrition', ['Yes', 'No'])   
 
     #Creating the prediction button
     if st.button('Predict'):
