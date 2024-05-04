@@ -130,7 +130,7 @@ if st.button('Predict'):
     num_cols = transformers.transform(num_cols)
 
     #Winsorizing the data
-    num_cols = winsorizer.transform(num_cols)
+    num_cols = winsorizer.fit_transform(num_cols)
 
     #Joining the data
     input_data = pd.concat([cat_cols, num_cols], axis=1)
