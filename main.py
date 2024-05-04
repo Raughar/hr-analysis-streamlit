@@ -75,6 +75,7 @@ if page == 'Attrition Prediction':
     JobSatisfaction = st.number_input('Job Satisfaction', min_value=0, max_value=5)
     MaritalStatus = st.selectbox('Marital Status', ['Single', 'Married', 'Divorced'])
     MonthlyRate = st.number_input('Monthly Rate', min_value=0)
+    HourlyRate = st.number_input('Hourly Rate', min_value=0)
     NumCompaniesWorked = st.number_input('Number of Companies Worked', min_value=0)
     OverTime = st.selectbox('Over Time', ['Yes', 'No'])
     PercentSalaryHike = st.number_input('Percent Salary Hike', min_value=0)
