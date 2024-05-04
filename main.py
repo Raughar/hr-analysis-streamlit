@@ -124,6 +124,7 @@ if page == 'Attrition Prediction':
 
         #Transforming the data not in the categorical columns
         num_cols = input_data.drop(columns=cat_cols.columns)
+        num_cols = num_cols[['Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']] 
         input_data = transformers.transform(num_cols)
 
         #Winsorizing the data
