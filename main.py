@@ -119,6 +119,8 @@ if page == 'Attrition Prediction':
         #Encoding the data
         cat_cols = input_data.select_dtypes(include=object)
         cat_cols = pd.concat([cat_cols, data[['Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]], axis=1)
+        #Ordering the columns as follows: Attrition	BusinessTravel	Department	EducationField	Gender	JobRole	MaritalStatus	OverTime	Education	EnvironmentSatisfaction	JobLevel	JobInvolvement	JobSatisfaction	PerformanceRating	RelationshipSatisfaction	StockOptionLevel	WorkLifeBalance
+        cat_cols = cat_cols[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]
         for col in cat_cols:
             input_data[col] = le.fit_transform(input_data[col])
 
@@ -129,6 +131,8 @@ if page == 'Attrition Prediction':
 
         #Winsorizing the data
         input_data = winsorizer.transform(num_cols)
+
+        #Concating the data
 
         #Predicting the attrition
         prediction = model.predict(input_data)
