@@ -122,15 +122,18 @@ if st.button('Predict'):
     #Ordering the columns as follows: Attrition	BusinessTravel	Department	EducationField	Gender	JobRole	MaritalStatus	OverTime	Education	EnvironmentSatisfaction	JobLevel	JobInvolvement	JobSatisfaction	PerformanceRating	RelationshipSatisfaction	StockOptionLevel	WorkLifeBalance
     cat_cols = cat_cols[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]
     for col in cat_cols:
-        input_data[col] = le.fit_transform(input_data[col])
+        cat_cols[col] = le.fit_transform(cat_cols[col])
 
     #Transforming the data not in the categorical columns
     num_cols = input_data.drop(columns=cat_cols.columns)
     num_cols = num_cols[['Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']] 
-    input_data = transformers.transform(num_cols)
+    num_cols = transformers.transform(num_cols)
 
     #Winsorizing the data
-    input_data = winsorizer.transform(num_cols)
+    num_cols = winsorizer.transform(num_cols)
+
+    #Joining the data
+    input_data = pd.concat([cat_cols, num_cols], axis=1)
 
     #Predicting the attrition
     prediction = model.predict(input_data)
