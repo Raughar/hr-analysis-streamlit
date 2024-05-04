@@ -130,7 +130,7 @@ if st.button('Predict'):
 
     # Check the output of transformers.transform(num_cols)
     transformed_data = transformers.transform(num_cols)
-    num_cols = transformed_data
+    num_cols = transformed_data.copy()
 
     # Winsorizing the data
     # Make sure winsorizer is properly fitted and can transform the data
