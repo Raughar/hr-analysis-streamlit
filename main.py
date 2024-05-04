@@ -118,7 +118,7 @@ if page == 'Attrition Prediction':
         cat_cols = data.select_dtypes(include=object)
         cat_cols = pd.concat([cat_cols, data[['Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]], axis=1)
         for col in cat_cols:
-            input_data[col] = le.transform(input_data[col])
+            input_data[col] = le.fit_transform(input_data[col])
 
         #Transforming the data not in the categorical columns
         num_cols = input_data.drop(columns=cat_cols.columns)
