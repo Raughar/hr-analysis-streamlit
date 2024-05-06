@@ -130,7 +130,7 @@ if st.button('Predict'):
 
     #Winsorizing the data
     #Applying the winsorizer to the numerical columns
-    winsorizer = Winsorizer(capping_method='iqr', tail='both', fold=1.5, variables=num_cols.columns)
+    winsorizer = Winsorizer(capping_method='iqr', tail='both', fold=1.5, variables=list(num_cols.columns))
     winsorizer.fit(num_cols)
     num_cols = winsorizer.transform(num_cols)
 
