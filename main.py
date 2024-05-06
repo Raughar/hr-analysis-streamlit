@@ -125,12 +125,12 @@ if st.button('Predict'):
     num_cols = input_data.drop(columns=cat_cols.columns)
     num_cols = num_cols[['Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']] 
 
-    #Transforming the data in the numerical columns
-    num_cols[num_cols.columns] = transformers.transform(num_cols[num_cols.columns])
-
     #Applying the winsorizer to the numerical columns
     winsorizer = Winsorizer(capping_method='iqr', tail='both', fold=1.5, variables=list(num_cols.columns))
     num_cols[num_cols.columns] = winsorizer.fit_transform(num_cols[num_cols.columns])
+    
+    #Transforming the data in the numerical columns
+    num_cols[num_cols.columns] = transformers.transform(num_cols[num_cols.columns])
 
     #Concatenating the data
 
