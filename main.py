@@ -109,9 +109,6 @@ if st.button('Predict'):
 
     #Getting the transformers from the file
     transformers = pickle.load(open('files/transformer','rb'))
-
-    #Getting the winsorizer from the file
-    winsorizer = pickle.load(open('files/winsorizer','rb'))
     
     #Creating the dataframe with the input data
     input_data = pd.DataFrame({'Age': [Age], 'Gender' : [Gender], 'BusinessTravel': [BusinessTravel], 'HourlyRate' : [HourlyRate], 'DailyRate': [DailyRate], 'Department': [Department], 'DistanceFromHome': [DistanceFromHome], 'Education': [Education], 'EducationField': [EducationField], 'EnvironmentSatisfaction': [EnvironmentSatisfaction], 'MonthlyIncome': [MonthlyIncome], 'JobInvolvement': [JobInvolvement], 'JobLevel': [JobLevel], 'JobRole': [JobRole], 'JobSatisfaction': [JobSatisfaction], 'MaritalStatus': [MaritalStatus], 'MonthlyRate': [MonthlyRate], 'NumCompaniesWorked': [NumCompaniesWorked], 'OverTime': [OverTime], 'PercentSalaryHike': [PercentSalaryHike], 'PerformanceRating': [PerformanceRating], 'RelationshipSatisfaction': [RelationshipSatisfaction], 'StockOptionLevel': [StockOptionLevel], 'TotalWorkingYears': [TotalWorkingYears], 'TrainingTimesLastYear': [TrainingTimesLastYear], 'WorkLifeBalance': [WorkLifeBalance], 'YearsAtCompany': [YearsAtCompany], 'YearsInCurrentRole': [YearsInCurrentRole], 'YearsSinceLastPromotion': [YearsSinceLastPromotion], 'YearsWithCurrManager': [YearsWithCurrManager], 'Attrition': [Attrition]})
@@ -122,30 +119,36 @@ if st.button('Predict'):
     #Ordering the columns as follows: Attrition	BusinessTravel	Department	EducationField	Gender	JobRole	MaritalStatus	OverTime	Education	EnvironmentSatisfaction	JobLevel	JobInvolvement	JobSatisfaction	PerformanceRating	RelationshipSatisfaction	StockOptionLevel	WorkLifeBalance
     cat_cols = cat_cols[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]
     for col in cat_cols:
-        input_data[col] = le.fit_transform(input_data[col])
+        cat_cols[col] = le.fit_transform(cat_cols[col])
 
     # Transforming the data not in the categorical columns
     num_cols = input_data.drop(columns=cat_cols.columns)
     num_cols = num_cols[['Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']] 
 
-    # Check the output of transformers.transform(num_cols)
-    transformed_data = transformers.transform(num_cols)
-    num_cols = transformed_data.copy()
+    #Transforming the data in the numerical columns
+    num_cols = transformers.transform(num_cols)
 
-    # Winsorizing the data
-    # Make sure winsorizer is properly fitted and can transform the data
-    input_data = winsorizer.transform(num_cols)
+    #Winsorizing the data
+    #Applying the winsorizer to the numerical columns
+    winsorizer = Winsorizer(capping_method='iqr', tail='both', fold=1.5, variables=num_cols.columns)
+    winsorizer.fit(num_cols)
+    num_cols = winsorizer.transform(num_cols)
+
+    #Concatenating the data
+
+    final_data = pd.concat([cat_cols, num_cols], axis=1)
+
     #Reordering the final data as follows: Attrition	BusinessTravel	Department	EducationField	Gender	JobRole	MaritalStatus	OverTime	Education	EnvironmentSatisfaction	JobLevel	JobInvolvement	JobSatisfaction	PerformanceRating	RelationshipSatisfaction	StockOptionLevel	WorkLifeBalance	Age	DailyRate	DistanceFromHome	HourlyRate	MonthlyIncome	MonthlyRate	NumCompaniesWorked	PercentSalaryHike	TotalWorkingYears	TrainingTimesLastYear	YearsAtCompany	YearsInCurrentRole	YearsSinceLastPromotion	YearsWithCurrManager
-    input_data = input_data[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance', 'Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']]
+    final_data = final_data[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance', 'Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']]
 
     #Predicting the attrition
-    prediction = model.predict(input_data)
+    prediction = model.predict(final_data)
 
     #Showing the prediction
     if prediction == 0:
-        st.write('The employee will not leave the company')
+        st.write('The employee will not leave the company due to attrition')
     else:
-        st.write('The employee will leave the company')
+        st.write('The employee will leave the company due to attrition')
 
 #Creating the footer of the page
-st.write('This is a dashboard to understand the attrition in the company')
+st.write('This project aims to predict the attrition of the employees in a company')
