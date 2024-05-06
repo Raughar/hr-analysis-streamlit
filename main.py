@@ -138,7 +138,7 @@ if st.button('Predict'):
 
     #Reordering the final data as follows: Attrition	BusinessTravel	Department	EducationField	Gender	JobRole	MaritalStatus	OverTime	Education	EnvironmentSatisfaction	JobLevel	JobInvolvement	JobSatisfaction	PerformanceRating	RelationshipSatisfaction	StockOptionLevel	WorkLifeBalance	Age	DailyRate	DistanceFromHome	HourlyRate	MonthlyIncome	MonthlyRate	NumCompaniesWorked	PercentSalaryHike	TotalWorkingYears	TrainingTimesLastYear	YearsAtCompany	YearsInCurrentRole	YearsSinceLastPromotion	YearsWithCurrManager
     final_data = final_data[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance', 'Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']]
-
+    final_data = final_data.drop(columns=['Attrition'])
     #Predicting the attrition
     prediction = model.predict(final_data)
 
