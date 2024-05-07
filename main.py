@@ -17,7 +17,7 @@ data = load_data()
 data = data.drop(columns=['EmployeeCount', 'EmployeeNumber', 'Over18', 'StandardHours'])
 
 #Creating the title of the page
-st.title('Attrition Prediction')
+st.title('Attrition Prediction App')
 
 #Creating the subheader of the page
 st.subheader('Prediction')
@@ -33,27 +33,28 @@ with col1:
     Age = st.number_input('Age', min_value=0, max_value=100)
     Gender = st.selectbox('Gender', ['Male', 'Female'])
     BusinessTravel = st.selectbox('Business Travel', ['Non-Travel', 'Travel_Rarely', 'Travel_Frequently'])
-    DailyRate = st.number_input('Daily Rate', min_value=0)
-    Department = st.selectbox('Department', ['Sales', 'Research & Development', 'Human Resources'])
     DistanceFromHome = st.number_input('Distance From Home', min_value=0)
+    HourlyRate = st.number_input('Hourly Rate', min_value=0)
+    DailyRate = st.number_input('Daily Rate', min_value=0)
+    MonthlyRate = st.number_input('Monthly Rate', min_value=0)
+    MonthlyIncome = st.number_input('Monthly Income', min_value=0)
+    PercentSalaryHike = st.number_input('Percent Salary Hike', min_value=0)
+    StockOptionLevel = st.number_input('Stock Option Level', min_value=0)
     Education = st.number_input('Education', min_value=0, max_value=5)
     EducationField = st.selectbox('Education Field', ['Life Sciences', 'Medical', 'Marketing', 'Technical Degree', 'Human Resources', 'Other'])
     EnvironmentSatisfaction = st.number_input('Environment Satisfaction', min_value=0, max_value=5)
-    MonthlyIncome = st.number_input('Monthly Income', min_value=0)
-    JobInvolvement = st.number_input('Job Involvement', min_value=0, max_value=5)
-    JobLevel = st.number_input('Job Level', min_value=0)
-    JobRole = st.selectbox('Job Role', ['Sales Executive', 'Research Scientist', 'Laboratory Technician', 'Manufacturing Director', 'Healthcare Representative', 'Manager', 'Sales Representative', 'Research Director', 'Human Resources'])
-    JobSatisfaction = st.number_input('Job Satisfaction', min_value=0, max_value=5)
     MaritalStatus = st.selectbox('Marital Status', ['Single', 'Married', 'Divorced'])
-with col2:
-    MonthlyRate = st.number_input('Monthly Rate', min_value=0)
-    HourlyRate = st.number_input('Hourly Rate', min_value=0)
-    NumCompaniesWorked = st.number_input('Number of Companies Worked', min_value=0)
     OverTime = st.selectbox('Over Time', ['Yes', 'No'])
-    PercentSalaryHike = st.number_input('Percent Salary Hike', min_value=0)
+
+with col2:
+    Department = st.selectbox('Department', ['Sales', 'Research & Development', 'Human Resources'])
+    JobRole = st.selectbox('Job Role', ['Sales Executive', 'Research Scientist', 'Laboratory Technician', 'Manufacturing Director', 'Healthcare Representative', 'Manager', 'Sales Representative', 'Research Director', 'Human Resources'])
+    JobLevel = st.number_input('Job Level', min_value=0)
+    JobInvolvement = st.number_input('Job Involvement', min_value=0, max_value=5)
+    JobSatisfaction = st.number_input('Job Satisfaction', min_value=0, max_value=5)
+    NumCompaniesWorked = st.number_input('Number of Companies Worked', min_value=0)
     PerformanceRating = st.number_input('Performance Rating', min_value=0, max_value=5)
     RelationshipSatisfaction = st.number_input('Relationship Satisfaction', min_value=0, max_value=5)
-    StockOptionLevel = st.number_input('Stock Option Level', min_value=0)
     TotalWorkingYears = st.number_input('Total Working Years', min_value=0)
     TrainingTimesLastYear = st.number_input('Training Times Last Year', min_value=0)
     WorkLifeBalance = st.number_input('Work Life Balance', min_value=0, max_value=5)
@@ -61,6 +62,7 @@ with col2:
     YearsInCurrentRole = st.number_input('Years In Current Role', min_value=0)
     YearsSinceLastPromotion = st.number_input('Years Since Last Promotion', min_value=0)
     YearsWithCurrManager = st.number_input('Years With Current Manager', min_value=0)
+    
 Attrition = st.selectbox('Attrition', ['Yes', 'No'])   
 
 #Creating the prediction button
@@ -137,7 +139,8 @@ if st.button('Predict'):
     if prediction[0] == 0:
         st.write('The employee will not leave the company')
     else:
-        st.write('The employee will leave the company')
+        st.write('The employee will most likely leave the company')
+        st.write('The probability of the employee leaving the company is:', model.predict_proba(final_input)[0][1])
 
 #Creating the footer of the page
 #Footer
