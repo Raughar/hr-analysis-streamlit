@@ -116,18 +116,18 @@ if st.button('Predict'):
     # Create the dataframe with the input data
     input_data = pd.DataFrame({'Age': [Age], 'Gender' : [Gender], 'BusinessTravel': [BusinessTravel], 'HourlyRate' : [HourlyRate], 'DailyRate': [DailyRate], 'Department': [Department], 'DistanceFromHome': [DistanceFromHome], 'Education': [Education], 'EducationField': [EducationField], 'EnvironmentSatisfaction': [EnvironmentSatisfaction], 'MonthlyIncome': [MonthlyIncome], 'JobInvolvement': [JobInvolvement], 'JobLevel': [JobLevel], 'JobRole': [JobRole], 'JobSatisfaction': [JobSatisfaction], 'MaritalStatus': [MaritalStatus], 'MonthlyRate': [MonthlyRate], 'NumCompaniesWorked': [NumCompaniesWorked], 'OverTime': [OverTime], 'PercentSalaryHike': [PercentSalaryHike], 'PerformanceRating': [PerformanceRating], 'RelationshipSatisfaction': [RelationshipSatisfaction], 'StockOptionLevel': [StockOptionLevel], 'TotalWorkingYears': [TotalWorkingYears], 'TrainingTimesLastYear': [TrainingTimesLastYear], 'WorkLifeBalance': [WorkLifeBalance], 'YearsAtCompany': [YearsAtCompany], 'YearsInCurrentRole': [YearsInCurrentRole], 'YearsSinceLastPromotion': [YearsSinceLastPromotion], 'YearsWithCurrManager': [YearsWithCurrManager], 'Attrition': [Attrition]})
 
-    # Encoding the categorical data
-    original_cat_cols = input_data.select_dtypes(include='object').columns
-    cat_cols = pd.concat([pd.Series(original_cat_cols), input_data[['Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]], axis=1)
-    for col in cat_cols.columns:
-        cat_cols[col] = le.fit_transform(cat_cols[col])
+    # # Encoding the categorical data
+    # original_cat_cols = input_data.select_dtypes(include='object').columns
+    # cat_cols = pd.concat([pd.Series(original_cat_cols), input_data[['Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]], axis=1)
+    # for col in cat_cols.columns:
+    #     cat_cols[col] = le.fit_transform(cat_cols[col])
             
     # Transforming the data in the numerical columns
-    num_cols = input_data.drop(columns=original_cat_cols)
+    # num_cols = input_data.drop(columns=original_cat_cols)
 
     # Transform the numerical columns using the loaded transformer
     # Transform the numerical columns using the loaded transformer
-    num_cols = pd.DataFrame(transformer.fit_transform(num_cols), columns=num_cols.columns)
+    # num_cols = pd.DataFrame(transformer.fit_transform(num_cols), columns=num_cols.columns)
 
     # Applying Winsorizer to the data
     # winsor_data = num_cols.copy()
@@ -135,14 +135,14 @@ if st.button('Predict'):
     # winsor_data[winsor_data.columns] = winsorizer.fit_transform(winsor_data)
 
     # Concatenating the data
-    final_data = pd.concat([cat_cols, num_cols], axis=1)
+    # final_data = pd.concat([cat_cols, num_cols], axis=1)
 
     # Reordering the data as to how the model was trained
-    final_data = final_data[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance', 'Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']]
+    input_data = input_data[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance', 'Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']]
 
     # Splitting the data
-    X = final_data.drop(columns='Attrition')
-    y = final_data['Attrition']
+    X = input_data.drop(columns='Attrition')
+    y = input_data['Attrition']
 
     # Predicting the attrition using the loaded model
     prediction = model.predict(X)
