@@ -114,7 +114,7 @@ if st.button('Predict'):
     #Encoding the categorical columns
     le = LabelEncoder()
     for col in cat_cols.columns:
-    cat_cols[col] = le.fit_transform(cat_cols[col])
+        cat_cols[col] = le.fit_transform(cat_cols[col])
 
     #Transforming the data
     power_data = num_cols.copy()
