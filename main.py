@@ -19,11 +19,14 @@ data = data.drop(columns=['EmployeeCount', 'EmployeeNumber', 'Over18', 'Standard
 #Creating the title of the page
 st.title('Attrition Prediction App')
 
+#Adding a separator line
+st.markdown('---')
+
 #Creating the subheader of the page
-st.subheader('Prediction')
+st.subheader('Form')
 
 #Creating the prediction of the attrition
-st.write('The following form allows you to predict the attrition of an employee')
+st.write('Please, fill the form below with the information of the new employee')
 
 #Creating the columns of the pageto input the data
 col1, col2 = st.columns(2)
