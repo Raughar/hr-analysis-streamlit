@@ -62,7 +62,7 @@ with col2:
     YearsInCurrentRole = st.number_input('Years In Current Role', min_value=0)
     YearsSinceLastPromotion = st.number_input('Years Since Last Promotion', min_value=0)
     YearsWithCurrManager = st.number_input('Years With Current Manager', min_value=0)
-    
+
 Attrition = st.selectbox('Attrition', ['Yes', 'No'])   
 
 #Creating the prediction button
@@ -137,8 +137,10 @@ if st.button('Predict'):
 
     # Showing the prediction
     if prediction[0] == 0:
+        st.subheader('Prediction Result:')
         st.write('The employee will not leave the company')
     else:
+        st.subheader('Prediction Result:')
         st.write('The employee will most likely leave the company')
         st.write('The probability of the employee leaving the company is:', model.predict_proba(final_input)[0][1])
 
