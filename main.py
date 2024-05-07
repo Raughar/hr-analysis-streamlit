@@ -100,52 +100,62 @@ if st.button('Predict'):
     from imblearn.ensemble import EasyEnsembleClassifier
     from sklearn.preprocessing import LabelEncoder
     from sklearn.model_selection import train_test_split
-
     from feature_engine.outliers import Winsorizer
-    import pickle
-
-    # Load the LabelEncoder from the file
-    le = pickle.load(open('files/label-encoder','rb'))
-
-    # Load the model from the file
-    model = pickle.load(open('files/model','rb'))
-
-    # Load the transformers from the file
-    transformer = pickle.load(open('files/transformer','rb'))
 
     # Create the dataframe with the input data
     input_data = pd.DataFrame({'Age': [Age], 'Gender' : [Gender], 'BusinessTravel': [BusinessTravel], 'HourlyRate' : [HourlyRate], 'DailyRate': [DailyRate], 'Department': [Department], 'DistanceFromHome': [DistanceFromHome], 'Education': [Education], 'EducationField': [EducationField], 'EnvironmentSatisfaction': [EnvironmentSatisfaction], 'MonthlyIncome': [MonthlyIncome], 'JobInvolvement': [JobInvolvement], 'JobLevel': [JobLevel], 'JobRole': [JobRole], 'JobSatisfaction': [JobSatisfaction], 'MaritalStatus': [MaritalStatus], 'MonthlyRate': [MonthlyRate], 'NumCompaniesWorked': [NumCompaniesWorked], 'OverTime': [OverTime], 'PercentSalaryHike': [PercentSalaryHike], 'PerformanceRating': [PerformanceRating], 'RelationshipSatisfaction': [RelationshipSatisfaction], 'StockOptionLevel': [StockOptionLevel], 'TotalWorkingYears': [TotalWorkingYears], 'TrainingTimesLastYear': [TrainingTimesLastYear], 'WorkLifeBalance': [WorkLifeBalance], 'YearsAtCompany': [YearsAtCompany], 'YearsInCurrentRole': [YearsInCurrentRole], 'YearsSinceLastPromotion': [YearsSinceLastPromotion], 'YearsWithCurrManager': [YearsWithCurrManager], 'Attrition': [Attrition]})
 
-    # # Encoding the categorical data
-    # original_cat_cols = input_data.select_dtypes(include='object').columns
-    # cat_cols = pd.concat([pd.Series(original_cat_cols), input_data[['Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]], axis=1)
-    # for col in cat_cols.columns:
-    #     cat_cols[col] = le.fit_transform(cat_cols[col])
-            
-    # Transforming the data in the numerical columns
-    # num_cols = input_data.drop(columns=original_cat_cols)
+    # #Separating categorical and numerical columns
+    cat_cols = data.select_dtypes(include=object)
+    cat_cols = pd.concat([cat_cols, data[['Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]], axis=1)
+    # #Adding the columns that are not in the categorical columns to the numerical columns
+    num_cols = data.drop(columns=cat_cols.columns)
 
-    # Transform the numerical columns using the loaded transformer
-    # Transform the numerical columns using the loaded transformer
-    # num_cols = pd.DataFrame(transformer.fit_transform(num_cols), columns=num_cols.columns)
+    #Encoding the categorical columns
+    le = LabelEncoder()
+    for col in cat_cols.columns:
+    cat_cols[col] = le.fit_transform(cat_cols[col])
 
-    # Applying Winsorizer to the data
-    # winsor_data = num_cols.copy()
-    # winsorizer = Winsorizer(capping_method='gaussian', tail='both', fold=1.5, variables=list(winsor_data.columns))
-    # winsor_data[winsor_data.columns] = winsorizer.fit_transform(winsor_data)
+    #Transforming the data
+    power_data = num_cols.copy()
+    #Applying the power transformer to the numerical columns
+    power = PowerTransformer()
+    power_data[power_data.columns] = power.fit_transform(power_data[power_data.columns])
 
-    # Concatenating the data
-    # final_data = pd.concat([cat_cols, num_cols], axis=1)
+    #Concatenating the categorical and numerical columns
+    final_data = pd.concat([cat_cols, power_data], axis=1)
 
-    # Reordering the data as to how the model was trained
-    input_data = input_data[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance', 'Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']]
+    #Creating the X and y variables
+    X = final_data.drop(columns='Attrition')
+    y = final_data['Attrition']
 
-    # Splitting the data
-    X = input_data.drop(columns='Attrition')
-    y = input_data['Attrition']
+    #Splitting the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
-    # Predicting the attrition using the loaded model
-    prediction = model.predict(X)
+    #Creating the model
+    eec = EasyEnsembleClassifier(n_estimators=250)
+    model = eec.fit(X_train, y_train)
+
+    #Separating the input data into categorical and numerical columns
+    cat_cols_input = input_data.select_dtypes(include=object)
+    cat_cols_input = pd.concat([cat_cols_input, input_data[['Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]], axis=1)
+    #Adding the columns that are not in the categorical columns to the numerical columns
+    num_cols_input = input_data.drop(columns=cat_cols_input.columns)
+
+    #Transforming the data
+    power_data_input = num_cols_input.copy()
+    #Applying the power transformer to the numerical columns
+    power_data_input[power_data_input.columns] = power.transform(power_data_input[power_data_input.columns])
+
+    #Encoding the categorical columns
+    for col in cat_cols_input.columns:
+        cat_cols_input[col] = le.transform(cat_cols_input[col])
+
+    #Concatenating the categorical and numerical columns
+    final_input = pd.concat([cat_cols_input, power_data_input], axis=1)
+
+    #Making the prediction
+    prediction = model.predict(final_input)
 
     # Showing the prediction
     if prediction[0] == 0:
