@@ -108,6 +108,15 @@ if st.button('Predict'):
     #Applying the power transformer to the numerical columns
     power_data_input[power_data_input.columns] = power.transform(power_data_input[power_data_input.columns])
 
+    # Assuming `power` is your fitted PowerTransformer and `fit_data` is the data used to fit the transformer
+    fit_columns = power_data.columns
+
+    # Reorder the columns of `power_data_input` to match `fit_data`
+    power_data_input = power_data_input[fit_columns]
+
+    # Now you can transform `power_data_input`
+    power_data_input[power_data_input.columns] = power.transform(power_data_input)
+
     #Encoding the categorical columns
     for col in cat_cols_input.columns:
         cat_cols_input[col] = le.transform(cat_cols_input[col])
