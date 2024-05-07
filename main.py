@@ -11,49 +11,9 @@ def load_data():
     return pd.read_csv('files/hr-attrition.csv')
 
 data = load_data()
-
-#Creating the basic shape of the streamlit app
-st.title('Attrition Dashboard')
-st.write('This is a dashboard to understand the attrition in the company')
-
-# #Creating the sidebar to navigate between the pages
-# page = st.sidebar.selectbox('Select a page', ['Dashboard', 'Attrition Prediction'])
-
-# #Creating the dashboard page
-
-# if page == 'Dashboard':
-#     #Creating the title of the page
-#     st.header('Dashboard')
-#     #Creating the subheader of the page
-#     st.subheader('Basic Information')
-#     #Creating the basic information of the dataset
-#     st.write('The dataset contains information about the employees in the company')
-#     st.write('The dataset contains', data.shape[0], 'rows and', data.shape[1], 'columns')
-
-#     #Creating the subheader of the page
-#     st.subheader('Data')
-#     #Creating the data table
-#     st.write(data)
-
-#     #Creating the subheader of the page
-#     st.subheader('Plots')
-#     #Creating the plots for the dashboard
-#     st.write('The following plots show the distribution of the data')
-#     #Creating the pairplot
-#     sns.pairplot(data)
-#     st.pyplot()
-
-#     #Creating the subheader of the page
-#     st.subheader('Statistics')
-#     #Creating the statistics of the data
-#     st.write('The following table shows the statistics of the data')
-#     st.write(data.describe())
-
-# #Creating the attrition prediction page
-
-# if page == 'Attrition Prediction':
+data = data.drop(columns='EmployeeCount', 'EmployeeNumber', 'Over18', 'StandardHours)
 #Creating the title of the page
-st.header('Attrition Prediction')
+st.title('Attrition Prediction')
 #Creating the subheader of the page
 st.subheader('Prediction')
 #Creating the prediction of the attrition
