@@ -115,7 +115,7 @@ if st.button('Predict'):
 
     #Encoding the categorical columns
     for col in cat_cols_input.columns:
-        cat_cols_input[col] = le.transform(cat_cols_input[col])
+        cat_cols_input[col] = le.fit_transform(cat_cols_input[col])
 
     #Concatenating the categorical and numerical columns
     final_input = pd.concat([cat_cols_input, power_data_input], axis=1)
