@@ -1,68 +1,67 @@
 #Importing the libraries
-import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 import streamlit as st
+from imblearn.ensemble import EasyEnsembleClassifier
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import PowerTransformer
 
 #Importing the dataset
 @st.cache_data
 def load_data():
     return pd.read_csv('files/hr-attrition.csv')
-
 data = load_data()
 data = data.drop(columns=['EmployeeCount', 'EmployeeNumber', 'Over18', 'StandardHours'])
+
 #Creating the title of the page
 st.title('Attrition Prediction')
+
 #Creating the subheader of the page
 st.subheader('Prediction')
+
 #Creating the prediction of the attrition
 st.write('The following form allows you to predict the attrition of an employee')
-#Creating the form to input the data, the values needed are: MonthlyIncome, Age, TotalWorkingYears, OverTime, YearsWithCurrManager, DailyRate, MonthlyRate, YearsAtCompany, StockOptionLevel, DistanceFromHome, HourlyRate, JobRole, NumCompaniesWorked, PercentSalaryHike, JobLevel, YearsInCurrentRole, EnvironmentSatisfaction, MaritalStatus, JobSatisfaction, YearsSinceLastPromotion, WorkLifeBalance, RelationshipSatisfaction, Education, TrainingTimesLastYear, JobInvolvement, BusinessTravel, EducationField, Department, Gender, PerformanceRating 
-Age = st.number_input('Age', min_value=0, max_value=100)
-Gender = st.selectbox('Gender', ['Male', 'Female'])
-BusinessTravel = st.selectbox('Business Travel', ['Non-Travel', 'Travel_Rarely', 'Travel_Frequently'])
-DailyRate = st.number_input('Daily Rate', min_value=0)
-Department = st.selectbox('Department', ['Sales', 'Research & Development', 'Human Resources'])
-DistanceFromHome = st.number_input('Distance From Home', min_value=0)
-Education = st.number_input('Education', min_value=0, max_value=5)
-EducationField = st.selectbox('Education Field', ['Life Sciences', 'Medical', 'Marketing', 'Technical Degree', 'Human Resources', 'Other'])
-EnvironmentSatisfaction = st.number_input('Environment Satisfaction', min_value=0, max_value=5)
-MonthlyIncome = st.number_input('Monthly Income', min_value=0)
-JobInvolvement = st.number_input('Job Involvement', min_value=0, max_value=5)
-JobLevel = st.number_input('Job Level', min_value=0)
-JobRole = st.selectbox('Job Role', ['Sales Executive', 'Research Scientist', 'Laboratory Technician', 'Manufacturing Director', 'Healthcare Representative', 'Manager', 'Sales Representative', 'Research Director', 'Human Resources'])
-JobSatisfaction = st.number_input('Job Satisfaction', min_value=0, max_value=5)
-MaritalStatus = st.selectbox('Marital Status', ['Single', 'Married', 'Divorced'])
-MonthlyRate = st.number_input('Monthly Rate', min_value=0)
-HourlyRate = st.number_input('Hourly Rate', min_value=0)
-NumCompaniesWorked = st.number_input('Number of Companies Worked', min_value=0)
-OverTime = st.selectbox('Over Time', ['Yes', 'No'])
-PercentSalaryHike = st.number_input('Percent Salary Hike', min_value=0)
-PerformanceRating = st.number_input('Performance Rating', min_value=0, max_value=5)
-RelationshipSatisfaction = st.number_input('Relationship Satisfaction', min_value=0, max_value=5)
-StockOptionLevel = st.number_input('Stock Option Level', min_value=0)
-TotalWorkingYears = st.number_input('Total Working Years', min_value=0)
-TrainingTimesLastYear = st.number_input('Training Times Last Year', min_value=0)
-WorkLifeBalance = st.number_input('Work Life Balance', min_value=0, max_value=5)
-YearsAtCompany = st.number_input('Years At Company', min_value=0)
-YearsInCurrentRole = st.number_input('Years In Current Role', min_value=0)
-YearsSinceLastPromotion = st.number_input('Years Since Last Promotion', min_value=0)
-YearsWithCurrManager = st.number_input('Years With Current Manager', min_value=0)
+
+#Creating the columns of the pageto input the data
+col1, col2 = st.columns(2)
+
+#Creating the form to input the data, the columns are created to make the form look better
+with col1:
+    Age = st.number_input('Age', min_value=0, max_value=100)
+    Gender = st.selectbox('Gender', ['Male', 'Female'])
+    BusinessTravel = st.selectbox('Business Travel', ['Non-Travel', 'Travel_Rarely', 'Travel_Frequently'])
+    DailyRate = st.number_input('Daily Rate', min_value=0)
+    Department = st.selectbox('Department', ['Sales', 'Research & Development', 'Human Resources'])
+    DistanceFromHome = st.number_input('Distance From Home', min_value=0)
+    Education = st.number_input('Education', min_value=0, max_value=5)
+    EducationField = st.selectbox('Education Field', ['Life Sciences', 'Medical', 'Marketing', 'Technical Degree', 'Human Resources', 'Other'])
+    EnvironmentSatisfaction = st.number_input('Environment Satisfaction', min_value=0, max_value=5)
+    MonthlyIncome = st.number_input('Monthly Income', min_value=0)
+    JobInvolvement = st.number_input('Job Involvement', min_value=0, max_value=5)
+    JobLevel = st.number_input('Job Level', min_value=0)
+    JobRole = st.selectbox('Job Role', ['Sales Executive', 'Research Scientist', 'Laboratory Technician', 'Manufacturing Director', 'Healthcare Representative', 'Manager', 'Sales Representative', 'Research Director', 'Human Resources'])
+    JobSatisfaction = st.number_input('Job Satisfaction', min_value=0, max_value=5)
+    MaritalStatus = st.selectbox('Marital Status', ['Single', 'Married', 'Divorced'])
+with col2:
+    MonthlyRate = st.number_input('Monthly Rate', min_value=0)
+    HourlyRate = st.number_input('Hourly Rate', min_value=0)
+    NumCompaniesWorked = st.number_input('Number of Companies Worked', min_value=0)
+    OverTime = st.selectbox('Over Time', ['Yes', 'No'])
+    PercentSalaryHike = st.number_input('Percent Salary Hike', min_value=0)
+    PerformanceRating = st.number_input('Performance Rating', min_value=0, max_value=5)
+    RelationshipSatisfaction = st.number_input('Relationship Satisfaction', min_value=0, max_value=5)
+    StockOptionLevel = st.number_input('Stock Option Level', min_value=0)
+    TotalWorkingYears = st.number_input('Total Working Years', min_value=0)
+    TrainingTimesLastYear = st.number_input('Training Times Last Year', min_value=0)
+    WorkLifeBalance = st.number_input('Work Life Balance', min_value=0, max_value=5)
+    YearsAtCompany = st.number_input('Years At Company', min_value=0)
+    YearsInCurrentRole = st.number_input('Years In Current Role', min_value=0)
+    YearsSinceLastPromotion = st.number_input('Years Since Last Promotion', min_value=0)
+    YearsWithCurrManager = st.number_input('Years With Current Manager', min_value=0)
 Attrition = st.selectbox('Attrition', ['Yes', 'No'])   
 
-
-
-#final_data = final_data[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance', 'Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']]
 #Creating the prediction button
 if st.button('Predict'):
-    #Importing the libraries
-    from imblearn.ensemble import EasyEnsembleClassifier
-    from sklearn.preprocessing import LabelEncoder
-    from sklearn.model_selection import train_test_split
-    from feature_engine.outliers import Winsorizer
-    from sklearn.preprocessing import PowerTransformer
-
     # Create the dataframe with the input data
     input_data = pd.DataFrame({'Age': [Age], 'Gender' : [Gender], 'BusinessTravel': [BusinessTravel], 'HourlyRate' : [HourlyRate], 'DailyRate': [DailyRate], 'Department': [Department], 'DistanceFromHome': [DistanceFromHome], 'Education': [Education], 'EducationField': [EducationField], 'EnvironmentSatisfaction': [EnvironmentSatisfaction], 'MonthlyIncome': [MonthlyIncome], 'JobInvolvement': [JobInvolvement], 'JobLevel': [JobLevel], 'JobRole': [JobRole], 'JobSatisfaction': [JobSatisfaction], 'MaritalStatus': [MaritalStatus], 'MonthlyRate': [MonthlyRate], 'NumCompaniesWorked': [NumCompaniesWorked], 'OverTime': [OverTime], 'PercentSalaryHike': [PercentSalaryHike], 'PerformanceRating': [PerformanceRating], 'RelationshipSatisfaction': [RelationshipSatisfaction], 'StockOptionLevel': [StockOptionLevel], 'TotalWorkingYears': [TotalWorkingYears], 'TrainingTimesLastYear': [TrainingTimesLastYear], 'WorkLifeBalance': [WorkLifeBalance], 'YearsAtCompany': [YearsAtCompany], 'YearsInCurrentRole': [YearsInCurrentRole], 'YearsSinceLastPromotion': [YearsSinceLastPromotion], 'YearsWithCurrManager': [YearsWithCurrManager], 'Attrition': [Attrition]})
 
@@ -136,5 +135,78 @@ if st.button('Predict'):
         st.write('The employee will not leave the company')
     else:
         st.write('The employee will leave the company')
+
 #Creating the footer of the page
-st.write('Made by: Samuel Carmona Skories')
+#Footer
+def image(src_as_string, **style):
+    return img(src=src_as_string, style=styles(**style))
+
+
+def link(link, text, **style):
+    return a(_href=link, _target="_blank", style=styles(**style))(text)
+
+
+def layout(*args):
+
+    style = """
+    <style>
+      # MainMenu {visibility: hidden;}
+      footer {visibility: hidden;}
+     .stApp { bottom: 105px; }
+    </style>
+    """
+
+    style_div = styles(
+        position="fixed",
+        left=0,
+        bottom=0,
+        margin=px(0, 0, 0, 0),
+        width=percent(100),
+        color="white",
+        text_align="center",
+        height="auto",
+        opacity=1
+    )
+
+    style_hr = styles(
+        display="block",
+        margin=px(8, 8, "auto", "auto"),
+        border_style="inset",
+        border_width=px(2)
+    )
+
+    body = p()
+    foot = div(
+        style=style_div
+    )(
+        hr(
+            style=style_hr
+        ),
+        body
+    )
+
+    st.markdown(style, unsafe_allow_html=True)
+
+    for arg in args:
+        if isinstance(arg, str):
+            body(arg)
+
+        elif isinstance(arg, HtmlElement):
+            body(arg)
+
+    st.markdown(str(foot), unsafe_allow_html=True)
+
+
+def footer():
+    myargs = [
+        "Made in ",
+        image('https://avatars3.githubusercontent.com/u/45109972?s=400&v=4',
+              width=px(25), height=px(25)),
+        " with ❤️ by ",
+        link("https://www.linkedin.com/in/samuelcskories/", "Samuel Carmona Sköries"),
+    ]
+    layout(*myargs)
+
+
+if __name__ == "__main__":
+    footer()
