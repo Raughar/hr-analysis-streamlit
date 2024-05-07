@@ -103,11 +103,6 @@ if st.button('Predict'):
     #Adding the columns that are not in the categorical columns to the numerical columns
     num_cols_input = input_data.drop(columns=cat_cols_input.columns)
 
-    #Transforming the data
-    power_data_input = num_cols_input.copy()
-    #Applying the power transformer to the numerical columns
-    power_data_input[power_data_input.columns] = power.transform(power_data_input[power_data_input.columns])
-
     # Assuming `power` is your fitted PowerTransformer and `fit_data` is the data used to fit the transformer
     fit_columns = power_data.columns
 
