@@ -126,7 +126,7 @@ if st.button('Predict'):
     num_cols = input_data.drop(columns=original_cat_cols)
 
     # Transform the numerical columns using the loaded transformer
-    num_cols = transformer.transform(num_cols[num_cols.columns])
+    num_cols = transformer.fit_transform(num_cols[num_cols.columns])
 
     # Applying Winsorizer to the data
     winsor_data = num_cols.copy()
