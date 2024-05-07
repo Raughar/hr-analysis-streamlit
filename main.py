@@ -122,6 +122,12 @@ if st.button('Predict'):
     # Remove the 'Attrition' column from final_input
     final_input = final_input.drop(columns=['Attrition'])
 
+    # Get the column order of X_train
+    column_order = X_train.columns
+
+    # Reorder the columns of final_input to match X_train
+    final_input = final_input[column_order]
+
     #Making the prediction
     prediction = model.predict(final_input)
 
