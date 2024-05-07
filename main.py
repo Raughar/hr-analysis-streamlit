@@ -118,7 +118,7 @@ if st.button('Predict'):
 
     # Encoding the categorical data
     cat_cols = input_data.select_dtypes(include='object').columns
-    cat_cols = pd.concat([pd.Series(cat_cols), input_data[['Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]], axis=1)
+    cat_cols = pd.concat([cat_cols, input_data[['Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]], axis=1)
     for col in cat_cols.columns:
         cat_cols[col] = le.fit_transform(cat_cols[col])
 
