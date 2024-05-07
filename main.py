@@ -131,7 +131,7 @@ if st.button('Predict'):
 
     # Applying Winsorizer to the data
     winsor_data = num_cols.copy()
-    winsorizer = Winsorizer(capping_method='iqr', tail='both', fold=1.5, variables=list(winsor_data.columns))
+    winsorizer = Winsorizer(capping_method='gaussian', tail='both', fold=1.5, variables=list(winsor_data.columns))
     winsor_data[winsor_data.columns] = winsorizer.fit_transform(winsor_data)
 
     # Concatenating the data
