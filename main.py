@@ -121,9 +121,9 @@ if st.button('Predict'):
     cat_cols = pd.concat([pd.Series(cat_cols), data[['Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]], axis=1)
     for col in cat_cols.columns:
         cat_cols[col] = le.fit_transform(cat_cols[col])
-        
+
     # Transforming the data in the numerical columns
-    num_cols = data.drop(columns=cat_cols.columns)
+    num_cols = input_data.drop(columns=cat_cols.columns)
 
     # Transform the numerical columns using the loaded transformer
     num_cols = transformer.transform(num_cols[num_cols.columns])
