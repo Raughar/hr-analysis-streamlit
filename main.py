@@ -142,7 +142,7 @@ if st.button('Predict'):
     else:
         st.subheader('Prediction Result:')
         st.write('The employee will most likely leave the company')
-        st.write('The probability of the employee leaving the company is:', model.predict_proba(final_input)[0][1])
+        st.write('The probability of the employee leaving the company is:', model.predict_proba(final_input)[0][1] * 100, '%')
 
 #Creating the footer of the page
 #Footer
