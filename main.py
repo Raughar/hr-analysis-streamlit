@@ -119,6 +119,8 @@ if st.button('Predict'):
 
     #Concatenating the categorical and numerical columns
     final_input = pd.concat([cat_cols_input, power_data_input], axis=1)
+    # Remove the 'Attrition' column from final_input
+    final_input = final_input.drop(columns=['Attrition'])
 
     #Making the prediction
     prediction = model.predict(final_input)
