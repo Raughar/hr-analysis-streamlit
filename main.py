@@ -11,7 +11,7 @@ def load_data():
     return pd.read_csv('files/hr-attrition.csv')
 
 data = load_data()
-data = data.drop(columns='EmployeeCount', 'EmployeeNumber', 'Over18', 'StandardHours')
+data = data.drop(columns=['EmployeeCount', 'EmployeeNumber', 'Over18', 'StandardHours'])
 #Creating the title of the page
 st.title('Attrition Prediction')
 #Creating the subheader of the page
