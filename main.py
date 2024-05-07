@@ -130,12 +130,12 @@ if st.button('Predict'):
     num_cols = pd.DataFrame(transformer.fit_transform(num_cols), columns=num_cols.columns)
 
     # Applying Winsorizer to the data
-    winsor_data = num_cols.copy()
-    winsorizer = Winsorizer(capping_method='gaussian', tail='both', fold=1.5, variables=list(winsor_data.columns))
-    winsor_data[winsor_data.columns] = winsorizer.fit_transform(winsor_data)
+    # winsor_data = num_cols.copy()
+    # winsorizer = Winsorizer(capping_method='gaussian', tail='both', fold=1.5, variables=list(winsor_data.columns))
+    # winsor_data[winsor_data.columns] = winsorizer.fit_transform(winsor_data)
 
     # Concatenating the data
-    final_data = pd.concat([cat_cols, winsor_data], axis=1)
+    final_data = pd.concat([cat_cols, num_cols], axis=1)
 
     # Reordering the data as to how the model was trained
     final_data = final_data[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance', 'Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']]
