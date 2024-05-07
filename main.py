@@ -100,55 +100,56 @@ if st.button('Predict'):
     from imblearn.ensemble import EasyEnsembleClassifier
     from sklearn.preprocessing import LabelEncoder
     from sklearn.model_selection import train_test_split
-    from sklearn.metrics import accuracy_score
+
     from feature_engine.outliers import Winsorizer
     import pickle
 
-    #Getting the LabelEncoder from the file
+    # Load the LabelEncoder from the file
     le = pickle.load(open('files/label-encoder','rb'))
 
-    #Getting the model from the file
+    # Load the model from the file
     model = pickle.load(open('files/model','rb'))
 
-    #Getting the transformers from the file
+    # Load the transformers from the file
     transformer = pickle.load(open('files/transformer','rb'))
-    
-    #Creating the dataframe with the input data
+
+    # Create the dataframe with the input data
     input_data = pd.DataFrame({'Age': [Age], 'Gender' : [Gender], 'BusinessTravel': [BusinessTravel], 'HourlyRate' : [HourlyRate], 'DailyRate': [DailyRate], 'Department': [Department], 'DistanceFromHome': [DistanceFromHome], 'Education': [Education], 'EducationField': [EducationField], 'EnvironmentSatisfaction': [EnvironmentSatisfaction], 'MonthlyIncome': [MonthlyIncome], 'JobInvolvement': [JobInvolvement], 'JobLevel': [JobLevel], 'JobRole': [JobRole], 'JobSatisfaction': [JobSatisfaction], 'MaritalStatus': [MaritalStatus], 'MonthlyRate': [MonthlyRate], 'NumCompaniesWorked': [NumCompaniesWorked], 'OverTime': [OverTime], 'PercentSalaryHike': [PercentSalaryHike], 'PerformanceRating': [PerformanceRating], 'RelationshipSatisfaction': [RelationshipSatisfaction], 'StockOptionLevel': [StockOptionLevel], 'TotalWorkingYears': [TotalWorkingYears], 'TrainingTimesLastYear': [TrainingTimesLastYear], 'WorkLifeBalance': [WorkLifeBalance], 'YearsAtCompany': [YearsAtCompany], 'YearsInCurrentRole': [YearsInCurrentRole], 'YearsSinceLastPromotion': [YearsSinceLastPromotion], 'YearsWithCurrManager': [YearsWithCurrManager], 'Attrition': [Attrition]})
 
-    #Encoding the categorical data
+    # Encoding the categorical data
     cat_cols = input_data.select_dtypes(include='object').columns
     cat_cols = pd.concat([cat_cols, data[['Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance']]], axis=1)
     for col in cat_cols.columns:
         cat_cols[col] = le.fit_transform(cat_cols[col])
 
-    #Transforming the data in the numerical columns
+    # Transforming the data in the numerical columns
     num_cols = data.drop(columns=cat_cols.columns)
+
+    # Transform the numerical columns using the loaded transformer
     num_cols = transformer.transform(num_cols[num_cols.columns])
 
-    #Applying Winsorizer to the data
+    # Applying Winsorizer to the data
     winsor_data = num_cols.copy()
     winsorizer = Winsorizer(capping_method='iqr', tail='both', fold=1.5, variables=list(winsor_data.columns))
     winsor_data[winsor_data.columns] = winsorizer.fit_transform(winsor_data)
 
-    #Concatenating the data
+    # Concatenating the data
     final_data = pd.concat([cat_cols, winsor_data], axis=1)
 
-    #Reordering the data as to how the model was trainedç
+    # Reordering the data as to how the model was trained
     final_data = final_data[['Attrition', 'BusinessTravel', 'Department', 'EducationField', 'Gender', 'JobRole', 'MaritalStatus', 'OverTime', 'Education', 'EnvironmentSatisfaction', 'JobLevel', 'JobInvolvement', 'JobSatisfaction', 'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel', 'WorkLifeBalance', 'Age', 'DailyRate', 'DistanceFromHome', 'HourlyRate', 'MonthlyIncome', 'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'TotalWorkingYears', 'TrainingTimesLastYear', 'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion', 'YearsWithCurrManager']]
 
-    #Splitting the data
+    # Splitting the data
     X = final_data.drop(columns='Attrition')
     y = final_data['Attrition']
 
-    #Predicting the attrition
+    # Predicting the attrition using the loaded model
     prediction = model.predict(X)
 
-    #Showing the prediction
+    # Showing the prediction
     if prediction[0] == 0:
         st.write('The employee will not leave the company')
     else:
         st.write('The employee will leave the company')
-
 #Creating the footer of the page
 st.write('Made by: Samuel Carmona Skories')
