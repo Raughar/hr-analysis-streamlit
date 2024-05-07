@@ -5,6 +5,9 @@ from imblearn.ensemble import EasyEnsembleClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import PowerTransformer
+from htbuilder import HtmlElement, div, ul, li, br, hr, a, p, img, styles, classes, fonts
+from htbuilder.units import percent, px
+from htbuilder.funcs import rgba, rgb
 
 #Importing the dataset
 @st.cache_data
